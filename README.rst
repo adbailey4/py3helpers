@@ -62,13 +62,15 @@ An example package. Generated with cookiecutter-pylibrary.
 Installation
 ============
 ::
+
     pip install py3helpers
 
 You can also install the in-development version with::
 
     pip install https://github.com/adbailey4/py3helpers/archive/master.zip
 
-You can also install with seq_tools with::
+You to allow access to seq_tools, you need to install with::
+
     pip install py3helpers[seq_tools]
 
 Or you can install from source with::
@@ -90,19 +92,6 @@ Development
 ===========
 
 To run the all tests run::
+
     tox
 
-Note, to combine the coverage data from all the tox environments run:
-
-.. list-table::
-    :widths: 10 90
-    :stub-columns: 1
-
-    - - Windows
-      - ::
-            set PYTEST_ADDOPTS=--cov-append
-            tox
-
-    - - Other
-      - ::
-            PYTEST_ADDOPTS=--cov-append tox
