@@ -10,6 +10,7 @@
 
 from multiprocessing import Manager, Process, current_process
 from timeit import default_timer as timer
+
 from py3helpers.utils import convert_seconds
 
 TOTAL_KEY = "total"

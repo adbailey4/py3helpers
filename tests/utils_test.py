@@ -4,14 +4,30 @@
 # File: utils_test.py
 #  executable: utils_test.py
 
+import filecmp
 # Author: Andrew Bailey
 # History: 12/07/17 Created
 ########################################################################
-import unittest
+import os
+import random
+import string
+import sys
 import tempfile
-import filecmp
+import unittest
 
-from py3helpers.utils import *
+import numpy as np
+from py3helpers.utils import (DotDict, NestedDefaultDict, all_abspath,
+                              all_string_permutations, allLexicographicRecur,
+                              binary_search, captured_output,
+                              change_np_field_type, check_numpy_table,
+                              concatenate_files, convert_seconds,
+                              count_lines_in_file, create_dot_dict,
+                              create_logger, find_substring_indices,
+                              get_all_sub_directories, get_random_string,
+                              get_random_strings, list_dir, list_dir_recursive,
+                              merge_dicts, merge_lists, merge_two_dicts,
+                              split_every, split_every_string, tar_gz, time_it,
+                              untar_gz)
 
 
 class UtilsTests(unittest.TestCase):
@@ -43,6 +59,7 @@ class UtilsTests(unittest.TestCase):
             with tempfile.TemporaryDirectory() as tempdir:
                 path = os.path.join(tempdir, "test.csv")
                 with open(path, "w") as tmp:
+                    tmp.write("atest")
                     files = list_dir(tempdir)
                     self.assertEqual(files[0], path)
                     files = list_dir(tempdir, ext='tsv')

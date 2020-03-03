@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-"""Classification output analysis functions and classes"""
+"""Classification output analysis functions and classes
+   isort:skip_file
+"""
 ########################################################################
 # File: classification.py
 #  executable: classification.py
@@ -8,28 +10,33 @@
 # History: 12/19/18 Created
 ########################################################################
 
-from py3helpers.utils import binary_search
-
 import os
-import pandas as pd
-import numpy as np
 import platform
-from sklearn.metrics import roc_curve, auc, confusion_matrix, average_precision_score, brier_score_loss, \
-    precision_recall_curve
-from sklearn.calibration import calibration_curve
-from sklearn.utils import column_or_1d, assert_all_finite, check_consistent_length
-from sklearn.utils.extmath import stable_cumsum
+import sysconfig
 from inspect import signature
-from numpy import interp
 from itertools import cycle
+
 import matplotlib as mpl
+
 if os.environ.get('DISPLAY', '') == '':
     print('no display found. Using non-interactive Agg backend')
     mpl.use('Agg')
-if platform.system() == "Darwin":
+if platform.system() == "Darwin" and sysconfig.get_config_var("PYTHONFRAMEWORK"):
     mpl.use("macosx")
-import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
+import matplotlib.pyplot as plt  # noqa: E402
+import matplotlib.ticker as ticker  # noqa: E402
+
+import numpy as np  # noqa: E402
+import pandas as pd  # noqa: E402
+from numpy import interp  # noqa: E402
+from py3helpers.utils import binary_search  # noqa: E402
+from sklearn.calibration import calibration_curve  # noqa: E402
+from sklearn.metrics import (auc, average_precision_score, brier_score_loss,
+                             confusion_matrix, precision_recall_curve,
+                             roc_curve)  # noqa: E402
+from sklearn.utils import (assert_all_finite, check_consistent_length,
+                           column_or_1d)  # noqa: E402
+from sklearn.utils.extmath import stable_cumsum  # noqa: E402
 
 np.seterr(divide='ignore', invalid='ignore')
 
@@ -544,7 +551,7 @@ class ClassificationMetrics(object):
         if class_n is None:
             class_n = self.class_ns[0]
         positive_threshold = threshold
-        negative_threshold = 1-threshold
+        negative_threshold = 1 - threshold
         tp = self.get_n_tps(class_n, positive_threshold)
         fp = self.get_n_fps(class_n, positive_threshold)
         fn = self.get_n_fns(class_n, negative_threshold)

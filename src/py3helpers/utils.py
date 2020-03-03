@@ -8,22 +8,22 @@
 # History: 12/09/17 Created
 ########################################################################
 
+import datetime
+import json
 import logging
 import os
-import string
 import random
 import re
-import json
+import shutil
+import string
+import sys
 import tarfile
-from datetime import datetime
+from collections import defaultdict
 from contextlib import contextmanager
 from io import StringIO
-import sys
+from itertools import islice, repeat, takewhile
+
 import numpy as np
-import datetime
-from collections import defaultdict
-from itertools import takewhile, repeat, islice
-import shutil
 
 
 @contextmanager
@@ -317,16 +317,16 @@ def allLexicographicRecur(string, data, last, index):
                 yield x
 
 
-def all_string_permutations(string, length=None):
+def all_string_permutations(string1, length=None):
     """Generates all lexicographically sorted permutations of a string
 
     source: https://www.geeksforgeeks.org/print-all-permutations-with-repetition-of-characters/
-    :param string: string to create all lexicographically sorted permutations of a string
+    :param string1: string to create all lexicographically sorted permutations of a string
     :param length: length of desired strings
     :return: generator of strings
     """
     if length is None:
-        length = len(string)
+        length = len(string1)
     assert length > 0, "Cannot provide empty string or length under 1"
 
     # Create a temp array that will be used by
@@ -335,10 +335,10 @@ def all_string_permutations(string, length=None):
 
     # Sort the input string so that we get all output strings in
     # lexicographically sorted order
-    string = sorted(''.join(set(string)))
+    string1 = sorted(''.join(set(string1)))
 
     # Now print all permutaions
-    return allLexicographicRecur(string, data, length - 1, 0)
+    return allLexicographicRecur(string1, data, length - 1, 0)
 
 
 def get_random_string(length, chars=string.ascii_uppercase):
@@ -446,9 +446,9 @@ def split_every(n, iterable):
         piece = list(islice(i, n))
 
 
-def split_every_string(n, string):
+def split_every_string(n, string1):
     """https://stackoverflow.com/questions/9475241/split-string-every-nth-character"""
-    for x in split_every(n, string):
+    for x in split_every(n, string1):
         yield "".join(x)
 
 
@@ -480,24 +480,24 @@ def binary_search(sorted_list, target, exact_match=True):
     :return: index of item or
 
     """
-    min = 0
-    max = len(sorted_list) - 1
-    avg = int(np.round((min + max) / 2))
+    min1 = 0
+    max1 = len(sorted_list) - 1
+    avg = int(np.round((min1 + max1) / 2))
     if exact_match:
         def return_condition():
             return sorted_list[avg] == target
     else:
         def return_condition():
-            if avg == min:
+            if avg == min1:
                 if target < sorted_list[avg]:
                     return True
-            if avg == max:
+            if avg == max1:
                 if sorted_list[avg] < target:
                     return True
             else:
                 return sorted_list[avg] < target < sorted_list[avg + 1]
 
-    while min < max:
+    while min1 < max1:
         if return_condition():
             return avg
         elif sorted_list[avg] < target:
@@ -583,6 +583,7 @@ def concatenate_files(file_paths, output_file_path, remove_files=False):
                     shutil.copyfileobj(in_file, out_file, 1024*1024*100)
                 if remove_files:
                     os.remove(file_path)
+
 
 if __name__ == '__main__':
     print("This is a library of python functions")

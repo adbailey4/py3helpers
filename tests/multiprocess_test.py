@@ -9,9 +9,12 @@
 ########################################################################
 
 import os
-import numpy as np
 import unittest
-from py3helpers.multiprocess import *
+
+import numpy as np
+from py3helpers.multiprocess import (FAILURE_KEY, MEM_USAGE_KEY, TOTAL_KEY,
+                                     BasicService, current_process,
+                                     run_service)
 from py3helpers.utils import captured_output
 
 

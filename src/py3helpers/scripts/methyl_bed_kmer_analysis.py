@@ -9,11 +9,13 @@
 ########################################################################
 
 import os
-import sys
 import pickle
+import sys
 from argparse import ArgumentParser
 from collections import Counter
-from py3helpers.seq_tools import ReferenceHandler, count_all_sequence_kmers, ReverseComplement
+
+from py3helpers.seq_tools import (ReferenceHandler, ReverseComplement,
+                                  count_all_sequence_kmers)
 from py3helpers.utils import time_it
 
 
@@ -66,8 +68,8 @@ def parse_methyl_bed(path_to_bed):
         for line in fh:
             chromosome, start1, stop1, name, coverage1, strand, start2, stop2, color, coverage2, percentage \
                 = line.split()
-            yield chromosome, int(start1), int(stop1), name, int(coverage1), strand, int(start2), int(stop2), color, \
-                  int(coverage2), int(percentage)
+            yield (chromosome, int(start1), int(stop1), name, int(coverage1), strand, int(start2), int(stop2),
+                   color, int(coverage2), int(percentage))
 
 
 class FilterBed(object):

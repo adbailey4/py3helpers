@@ -8,12 +8,14 @@
 # History: 03/27/19 Created
 ########################################################################
 
-import unittest
 import os
 import tempfile
+import unittest
 
-from py3helpers.scripts.merge_methyl_bed_files import *
-from py3helpers.scripts.methyl_bed_kmer_analysis import *
+from py3helpers.scripts.merge_methyl_bed_files import (aggregate_methylbeds,
+                                                       write_bed_file)
+from py3helpers.scripts.methyl_bed_kmer_analysis import (FilterBed,
+                                                         get_kmer_counts_from_reference_given_bed)
 from py3helpers.utils import captured_output
 
 

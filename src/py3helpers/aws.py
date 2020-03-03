@@ -8,14 +8,15 @@
 # History: 03/27/19 Created
 ########################################################################
 
-# boto3
-import boto3
-import botocore
+import math
 # built in
 import os
 import warnings
-import math
 from concurrent.futures import ProcessPoolExecutor
+
+# boto3
+import boto3
+import botocore
 
 
 class S3Client(object):
@@ -41,9 +42,9 @@ class S3Client(object):
         """Hide unnecessary warnings"""
         warnings.filterwarnings("ignore", category=ResourceWarning, message="unclosed.*<ssl.SSLSocket.*>")
         try:
-            a = [x for x in self.s3_resource.buckets.all()]
-            a = [x for x in self.s3_client.list_buckets()]
-        except Exception as _:
+            self.s3_resource.buckets.all().__next__()
+            self.s3_client.list_buckets().__next__()
+        except Exception:
             return False
         return True
 
@@ -71,7 +72,7 @@ class AwsS3(S3Client):
                     aws_session_token = response["Credentials"]["SessionToken"]
             else:
                 profile_name = None
-        except (botocore.exceptions.ProfileNotFound, botocore.exceptions.ClientError) as _:
+        except (botocore.exceptions.ProfileNotFound, botocore.exceptions.ClientError):
             pass
         super().__init__(aws_access_key_id, aws_secret_access_key, aws_session_token, profile_name)
 
@@ -88,10 +89,8 @@ class AwsS3(S3Client):
         try:
             self.s3_resource.Bucket(bucket).download_file(key, dest)
         except botocore.exceptions.ClientError as e:
-            if e.response['Error']['Code'] == "404":
-                print("The object does not exist. {}".format(path))
-                dest = False
-            elif e.response['Error']['Code'] == 'NoSuchKey':
+            if e.response['Error']['Code'] == "404" or e.response['Error']['Code'] == "403" or \
+                    e.response['Error']['Code'] == 'NoSuchKey':
                 print("The object does not exist. {}".format(path))
                 dest = False
             elif e.response['Error']['Code'] == 'NoSuchBucket':
@@ -148,10 +147,8 @@ class AwsS3(S3Client):
             try:
                 resource.Bucket(bucket).download_file(key, out_file)
             except botocore.exceptions.ClientError as e:
-                if e.response['Error']['Code'] == "404":
-                    print("The object does not exist. {}".format(path))
-                    out_file = False
-                elif e.response['Error']['Code'] == 'NoSuchKey':
+                if e.response['Error']['Code'] == "404" or e.response['Error']['Code'] == "403" or \
+                        e.response['Error']['Code'] == 'NoSuchKey':
                     print("The object does not exist. {}".format(path))
                     out_file = False
                 elif e.response['Error']['Code'] == 'NoSuchBucket':
@@ -221,7 +218,7 @@ class AwsS3(S3Client):
         bucket_name, save_path = self.split_name(object_path)
         try:
             self.s3_resource.Object(bucket_name, save_path).load()
-        except botocore.exceptions.ClientError as _:
+        except botocore.exceptions.ClientError:
             return False
         return True
 
@@ -259,7 +256,7 @@ class AwsS3(S3Client):
                 result = self.s3_client.list_objects(Bucket=bucket_name, Prefix=save_path)
                 if result["Contents"]:
                     return True
-            except (botocore.exceptions.ClientError, KeyError) as _:
+            except (botocore.exceptions.ClientError, KeyError):
                 # The object does not exist.
                 return False
         return False

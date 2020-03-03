@@ -9,15 +9,15 @@
 ########################################################################
 
 import os
-import mappy as mp
 import re
 import tempfile
 from collections import Counter, namedtuple
 
+import mappy as mp
+from Bio import SeqIO, pairwise2
 from Bio.Seq import Seq
-from Bio import pairwise2, SeqIO
-from pysam import FastaFile, AlignmentFile, AlignedSegment, AlignmentHeader
 from py3helpers.utils import split_every_string
+from pysam import AlignedSegment, AlignmentFile, AlignmentHeader, FastaFile
 
 IUPAC_BASES = ("A", "C", "T", "G", "W", "R", "Y", "S", "K", "M", "B", "D", "H", "V", "N")
 IUPAC_DICT = {"A": "A",
@@ -463,7 +463,8 @@ class SeqAlignment(object):
         ref_index = 0
         total_len = 0
         # go through cigar
-        for num, cigar_char in re.findall('(\d+)([MIDNSHP=X])', self.cigar):
+        regex_string = r'(\d+)([MIDNSHP=X])'
+        for num, cigar_char in re.findall(regex_string, self.cigar):
             num = int(num)
             total_len += num
             # map bases to reference
@@ -570,7 +571,8 @@ class Cigar(object):
         assert cigar_chars.issubset(
             self.CIGAR), "Cigar contains extraneous characters. Only 'MIDNSHP=X' allowed. {}".format(cigar_chars)
         soft_clipped = 0
-        for num, char in re.findall('(\d+)([MIDNSHP=X])', self.cigar):
+        regex_string = r'(\d+)([MIDNSHP=X])'
+        for num, char in re.findall(regex_string, self.cigar):
             num = int(num)
             if char == "M" or char == "=":
                 self.matches += num

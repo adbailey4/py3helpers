@@ -8,17 +8,15 @@
 # History: 12/19/18 Created
 ########################################################################
 
-import sys
+import os
+import tempfile
+import unittest
+
 import numpy as np
 import pandas as pd
-
-import os
-import unittest
-import tempfile
-import datetime
+from py3helpers.classification import ClassificationMetrics
+from py3helpers.utils import captured_output, get_random_strings
 from sklearn import preprocessing
-from py3helpers.classification import *
-from py3helpers.utils import get_random_strings, captured_output
 
 
 def generate_random_label_prob_data(n_row, column_names):

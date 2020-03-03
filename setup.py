@@ -1,18 +1,13 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 import io
 import re
 from glob import glob
-from os.path import basename
-from os.path import dirname
-from os.path import join
-from os.path import splitext
+from os.path import basename, dirname, join, splitext
 
-from setuptools import find_packages
-from setuptools import setup
+from setuptools import find_packages, setup
 
 
 def read(*names, **kwargs):
@@ -53,12 +48,6 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
-        'Programming Language :: Python :: Implementation :: CPython',
-        'Programming Language :: Python :: Implementation :: PyPy',
-        # uncomment if you test on these interpreters:
-        # 'Programming Language :: Python :: Implementation :: IronPython',
-        # 'Programming Language :: Python :: Implementation :: Jython',
-        # 'Programming Language :: Python :: Implementation :: Stackless',
         'Topic :: Utilities',
     ],
     project_urls={
@@ -74,9 +63,11 @@ setup(
         'scikit-learn>=0.19.0',
         'matplotlib>=2.0.2',
         'boto3>=1.9',
-        'moto'],
+        'moto>=1.3.14'],
     scripts=["src/py3helpers/scripts/merge_methyl_bed_files.py"],
-    extras_require={'seq_tools': ['Cython>=0.29.12', 'pysam>=0.15', 'biopython>=1.73', 'mappy>=2.16']},
+    extras_require={'seq_tools': ['Cython>=0.29.12', 'pysam>=0.15', 'biopython>=1.73',
+                                  'mappy==2.17; python_version>="3.6"',
+                                  'mappy==2.16; python_version<="3.6"']},
     entry_points={
         'console_scripts': [
             'py3helpers = py3helpers.cli:main',

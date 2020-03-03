@@ -8,13 +8,14 @@
 # History: 03/27/19 Created
 ########################################################################
 
+import os
+import tempfile
+import unittest
+
+import boto3
+from moto import mock_s3
 from py3helpers.aws import AwsS3
 from py3helpers.utils import captured_output
-from moto import mock_s3
-import boto3
-import unittest
-import tempfile
-import os
 
 
 class AwsTests(unittest.TestCase):

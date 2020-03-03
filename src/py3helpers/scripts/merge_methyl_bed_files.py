@@ -9,6 +9,7 @@
 ########################################################################
 
 from argparse import ArgumentParser
+
 from py3helpers.utils import NestedDefaultDict
 
 
@@ -42,8 +43,8 @@ def aggregate_methylbeds(methyl_beds):
     for input_file in methyl_beds:
         with open(input_file, 'r') as fh:
             for line in fh:
-                chromosome, start1, stop1, name, coverage1, \
-                strand, start2, stop2, color, coverage2, percentage = line.split()
+                chromosome, start1, stop1, name, coverage1, strand, start2, stop2, color, coverage2, percentage \
+                    = line.split()
                 try:
                     all_data[chromosome][strand][start1].append((color, int(coverage2), float(percentage)))
                 except AttributeError:
