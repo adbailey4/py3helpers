@@ -55,7 +55,7 @@ Overview
 
 .. end-badges
 
-An example package. Generated with cookiecutter-pylibrary.
+General python functions and classes which could be used across multiple projects.
 
 * Free software: BSD 3-Clause License
 
