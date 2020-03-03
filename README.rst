@@ -61,13 +61,25 @@ An example package. Generated with cookiecutter-pylibrary.
 
 Installation
 ============
-
 ::
     pip install py3helpers
 
 You can also install the in-development version with
 ::
+
     pip install https://github.com/adbailey4/py3helpers/archive/master.zip
+
+You can also install with seq_tools with
+::
+    pip install py3helpers[seq_tools]
+
+Or you can install from source with
+::
+
+    git clone https://github.com/adbailey4/python_utils
+    cd python_utils
+    pip install -e.[seq_tools]
+    python setup.py test
 
 
 Documentation
