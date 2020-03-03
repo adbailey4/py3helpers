@@ -68,18 +68,16 @@ setup(
         'Changelog': 'https://py3helpers.readthedocs.io/en/latest/changelog.html',
         'Issue Tracker': 'https://github.com/adbailey4/py3helpers/issues',
     },
-    keywords=[
-        # eg: 'keyword1', 'keyword2', 'keyword3',
-    ],
-    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
+    keywords=['utility', 'python3', 'functions'],
+    python_requires='>=3.5',
     install_requires=[
-        # eg: 'aspectlib==1.1.1', 'six>=1.7',
-    ],
-    extras_require={
-        # eg:
-        #   'rst': ['docutils>=0.11'],
-        #   ':python_version=="2.6"': ['argparse'],
-    },
+        'numpy>=1.14.2',
+        'pandas>=0.23.4',
+        'scikit-learn>=0.19.0',
+        'matplotlib>=2.0.2',
+        'boto3>=1.9'],
+    scripts=["src/py3helpers/scripts/merge_methyl_bed_files.py"],
+    extras_require={'seq_tools': ['Cython>=0.29.12', 'pysam>=0.15', 'biopython>=1.73', 'mappy>=2.16']},
     entry_points={
         'console_scripts': [
             'py3helpers = py3helpers.cli:main',
