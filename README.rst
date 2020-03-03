@@ -64,17 +64,14 @@ Installation
 ::
     pip install py3helpers
 
-You can also install the in-development version with
-::
+You can also install the in-development version with::
 
     pip install https://github.com/adbailey4/py3helpers/archive/master.zip
 
-You can also install with seq_tools with
-::
+You can also install with seq_tools with::
     pip install py3helpers[seq_tools]
 
-Or you can install from source with
-::
+Or you can install from source with::
 
     git clone https://github.com/adbailey4/python_utils
     cd python_utils
@@ -92,8 +89,7 @@ https://py3helpers.readthedocs.io/
 Development
 ===========
 
-To run the all tests run
-::
+To run the all tests run::
     tox
 
 Note, to combine the coverage data from all the tox environments run:
