@@ -8,18 +8,12 @@
 # History: 12/19/18 Created
 ########################################################################
 
+from py3helpers.utils import binary_search
+
 import os
 import pandas as pd
 import numpy as np
-import matplotlib as mpl
-
-if os.environ.get('DISPLAY', '') == '':
-    print('no display found. Using non-interactive Agg backend')
-    mpl.use('Agg')
-# if platform.system() == "Darwin":
-#     mpl.use("macosx")
-import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
+import platform
 from sklearn.metrics import roc_curve, auc, confusion_matrix, average_precision_score, brier_score_loss, \
     precision_recall_curve
 from sklearn.calibration import calibration_curve
@@ -27,8 +21,16 @@ from sklearn.utils import column_or_1d, assert_all_finite, check_consistent_leng
 from sklearn.utils.extmath import stable_cumsum
 from inspect import signature
 from numpy import interp
-from src.py3helpers.utils import binary_search
 from itertools import cycle
+import matplotlib as mpl
+if os.environ.get('DISPLAY', '') == '':
+    print('no display found. Using non-interactive Agg backend')
+    mpl.use('Agg')
+if platform.system() == "Darwin":
+    mpl.use("macosx")
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+
 np.seterr(divide='ignore', invalid='ignore')
 
 
@@ -597,7 +599,7 @@ class ClassificationMetrics(object):
                          "Negative Likelihood Ratio\nfnr/tnr\n{0:.3f}".format(negative_likelihood_ratio),
                          "F1 Score\n2*[(ppv * tpr) / (ppv + tpr)]\n{0:.3f}".format(f1_score)]])
 
-        fig = plt.figure(figsize=(15, 5))
+        plt.figure(figsize=(15, 5))
         cp = tp + fn
         cn = tn + fp
         total = tn + fp + fn + tp

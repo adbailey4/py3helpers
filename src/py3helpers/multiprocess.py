@@ -10,7 +10,7 @@
 
 from multiprocessing import Manager, Process, current_process
 from timeit import default_timer as timer
-from src.py3helpers.utils import convert_seconds
+from py3helpers.utils import convert_seconds
 
 TOTAL_KEY = "total"
 FAILURE_KEY = "failure"

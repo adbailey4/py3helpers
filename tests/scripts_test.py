@@ -12,8 +12,8 @@ import unittest
 import os
 import tempfile
 
-from py3helpers.bin.merge_methyl_bed_files import *
-from py3helpers.bin.methyl_bed_kmer_analysis import *
+from py3helpers.scripts.merge_methyl_bed_files import *
+from py3helpers.scripts.methyl_bed_kmer_analysis import *
 from py3helpers.utils import captured_output
 
 

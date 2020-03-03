@@ -27,7 +27,7 @@ setup(
     name='py3helpers',
     version='0.4.0',
     license='BSD-3-Clause',
-    description='An example package. Generated with cookiecutter-pylibrary.',
+    description='Python utility functions.',
     long_description='%s\n%s' % (
         re.compile('^.. start-badges.*^.. end-badges', re.M | re.S).sub('', read('README.rst')),
         re.sub(':[a-z]+:`~?(.*?)`', r'``\1``', read('CHANGELOG.rst'))
@@ -49,8 +49,6 @@ setup(
         'Operating System :: POSIX',
         'Operating System :: Microsoft :: Windows',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
@@ -75,7 +73,8 @@ setup(
         'pandas>=0.23.4',
         'scikit-learn>=0.19.0',
         'matplotlib>=2.0.2',
-        'boto3>=1.9'],
+        'boto3>=1.9',
+        'moto'],
     scripts=["src/py3helpers/scripts/merge_methyl_bed_files.py"],
     extras_require={'seq_tools': ['Cython>=0.29.12', 'pysam>=0.15', 'biopython>=1.73', 'mappy>=2.16']},
     entry_points={

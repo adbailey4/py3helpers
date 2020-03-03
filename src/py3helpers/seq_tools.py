@@ -17,7 +17,7 @@ from collections import Counter, namedtuple
 from Bio.Seq import Seq
 from Bio import pairwise2, SeqIO
 from pysam import FastaFile, AlignmentFile, AlignedSegment, AlignmentHeader
-from src.py3helpers.utils import split_every_string
+from py3helpers.utils import split_every_string
 
 IUPAC_BASES = ("A", "C", "T", "G", "W", "R", "Y", "S", "K", "M", "B", "D", "H", "V", "N")
 IUPAC_DICT = {"A": "A",

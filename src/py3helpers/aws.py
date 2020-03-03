@@ -43,9 +43,10 @@ class S3Client(object):
         try:
             a = [x for x in self.s3_resource.buckets.all()]
             a = [x for x in self.s3_client.list_buckets()]
-        except Exception as e:
+        except Exception as _:
             return False
         return True
+
 
 class AwsS3(S3Client):
     """Class to deal with getting information from aws s3"""
@@ -70,7 +71,7 @@ class AwsS3(S3Client):
                     aws_session_token = response["Credentials"]["SessionToken"]
             else:
                 profile_name = None
-        except botocore.exceptions.ProfileNotFound as e:
+        except (botocore.exceptions.ProfileNotFound, botocore.exceptions.ClientError) as _:
             pass
         super().__init__(aws_access_key_id, aws_secret_access_key, aws_session_token, profile_name)
 
@@ -90,6 +91,12 @@ class AwsS3(S3Client):
             if e.response['Error']['Code'] == "404":
                 print("The object does not exist. {}".format(path))
                 dest = False
+            elif e.response['Error']['Code'] == 'NoSuchKey':
+                print("The object does not exist. {}".format(path))
+                dest = False
+            elif e.response['Error']['Code'] == 'NoSuchBucket':
+                print("The Bucket not exist. {}".format(bucket))
+                dest = False
             else:
                 raise e
         return dest
@@ -101,7 +108,7 @@ class AwsS3(S3Client):
         """
 
         n = math.ceil(len(paths) / n_workers)
-        chunks = [paths[x:x+n] for x in range(0, len(paths), n)]
+        chunks = [paths[x:x + n] for x in range(0, len(paths), n)]
 
         futures = []
         with ProcessPoolExecutor(max_workers=len(chunks)) as executor:
@@ -124,7 +131,8 @@ class AwsS3(S3Client):
         return downloaded_files
 
     @staticmethod
-    def download_files(aws_access_key_id=None, aws_secret_access_key=None, aws_session_token=None, profile_name="default", paths=None, dest=None):
+    def download_files(aws_access_key_id=None, aws_secret_access_key=None, aws_session_token=None,
+                       profile_name="default", paths=None, dest=None):
         """
         Create a new Boto3 Session, and download chunk of files.
         Auto create folders along the way.
@@ -141,7 +149,13 @@ class AwsS3(S3Client):
                 resource.Bucket(bucket).download_file(key, out_file)
             except botocore.exceptions.ClientError as e:
                 if e.response['Error']['Code'] == "404":
-                    print("The object does not exist. {}".format(os.path.join(dest, key)))
+                    print("The object does not exist. {}".format(path))
+                    out_file = False
+                elif e.response['Error']['Code'] == 'NoSuchKey':
+                    print("The object does not exist. {}".format(path))
+                    out_file = False
+                elif e.response['Error']['Code'] == 'NoSuchBucket':
+                    print("The Bucket not exist. {}".format(bucket))
                     out_file = False
                 else:
                     raise e
@@ -196,7 +210,7 @@ class AwsS3(S3Client):
             # If a client error is thrown, then check that it was a 404 error.
             # If it was a 404 error, then the bucket does not exist.
             error_code = e.response['Error']['Code']
-            if error_code == '404':
+            if error_code == '404' or error_code == '403':
                 exists = False
         return exists
 
@@ -207,7 +221,7 @@ class AwsS3(S3Client):
         bucket_name, save_path = self.split_name(object_path)
         try:
             self.s3_resource.Object(bucket_name, save_path).load()
-        except botocore.exceptions.ClientError as e:
+        except botocore.exceptions.ClientError as _:
             return False
         return True
 
@@ -224,7 +238,7 @@ class AwsS3(S3Client):
         """Split a name to get bucket and key path
         :param name: path to bucket or key
         """
-        split_name = [x for x in name.split("/") if x is not '']
+        split_name = [x for x in name.split("/") if x != '']
         bucket_name = split_name[0]
         key_path = "/".join(split_name[1:])
         return bucket_name, key_path
@@ -245,7 +259,7 @@ class AwsS3(S3Client):
                 result = self.s3_client.list_objects(Bucket=bucket_name, Prefix=save_path)
                 if result["Contents"]:
                     return True
-            except (botocore.exceptions.ClientError, KeyError) as e:
+            except (botocore.exceptions.ClientError, KeyError) as _:
                 # The object does not exist.
                 return False
         return False
@@ -264,14 +278,16 @@ class AwsS3(S3Client):
         """
         assert self.folder_exists(path), "AWS object '{}' does not exist".format(path)
         bucket, prefix = self.split_name(path)
-        paginator = self.s3_client.get_paginator("list_objects_v2")
-
+        paginator = self.s3_client.get_paginator("list_objects")
+        # take care of weird cases when a file has same prefix as a folder
+        if len(prefix) > 0:
+            prefix += "/"
         kwargs = {'Bucket': bucket}
 
         # We can pass the prefix directly to the S3 API.  If the user has passed
         # a tuple or list of prefixes, we go through them one by one.
         if isinstance(prefix, str):
-            prefixes = (prefix, )
+            prefixes = (prefix,)
         else:
             prefixes = prefix
 
@@ -288,4 +304,3 @@ class AwsS3(S3Client):
                     key = obj["Key"]
                     if key.endswith(ext) and not key.endswith("/"):
                         yield os.path.join(bucket, key)
-
