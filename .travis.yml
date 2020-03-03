@@ -23,11 +23,6 @@ matrix:
         - TOXENV=docs
     - os: osx
       language: generic
-      env:
-        - TOXENV=py27
-    - env:
-        - TOXENV=py27,codecov
-      python: '2.7'
     - env:
         - TOXENV=py35,codecov
       python: '3.5'
@@ -44,9 +39,6 @@ matrix:
     - env:
         - TOXENV=py38,codecov
       python: '3.8'
-    - env:
-        - TOXENV=pypy,codecov
-      python: 'pypy'
     - env:
         - TOXENV=pypy3,codecov
         - TOXPYTHON=pypy3
