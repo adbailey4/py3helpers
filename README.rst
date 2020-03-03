@@ -10,7 +10,7 @@ Overview
     * - docs
       - |docs|
     * - tests
-      - | |travis| |appveyor| |requires|
+      - | |travis| |requires|
         | |codecov|
     * - package
       - | |version| |wheel| |supported-versions| |supported-implementations|
@@ -22,10 +22,6 @@ Overview
 .. |travis| image:: https://api.travis-ci.org/adbailey4/py3helpers.svg?branch=master
     :alt: Travis-CI Build Status
     :target: https://travis-ci.org/adbailey4/py3helpers
-
-.. |appveyor| image:: https://ci.appveyor.com/api/projects/status/github/adbailey4/py3helpers?branch=master&svg=true
-    :alt: AppVeyor Build Status
-    :target: https://ci.appveyor.com/project/adbailey4/py3helpers
 
 .. |requires| image:: https://requires.io/github/adbailey4/py3helpers/requirements.svg?branch=master
     :alt: Requirements Status
