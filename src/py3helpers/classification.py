@@ -281,7 +281,7 @@ class ClassificationMetrics(object):
             plt.savefig(save_fig_path)
         else:
             plt.show()
-            pass
+        return plt
 
     def get_fp_ids(self, class_n, threshold=0.5):
         """Get the false positive ids given a class and threshold"""
@@ -371,7 +371,7 @@ class ClassificationMetrics(object):
             plt.savefig(save_fig_path)
         else:
             plt.show()
-            pass
+        return plt
 
     def plot_multiclass_roc(self, lw=2, save_fig_path=None, title='Multi-class ROC'):
         # Plot all ROC curves
@@ -407,7 +407,7 @@ class ClassificationMetrics(object):
             plt.savefig(save_fig_path)
         else:
             plt.show()
-            pass
+        return plt
 
     def plot_precision_recall(self, class_n, save_fig_path=None, title="Precision Recall curve"):
         if save_fig_path is not None:
@@ -430,7 +430,7 @@ class ClassificationMetrics(object):
             plt.savefig(save_fig_path)
         else:
             plt.show()
-            pass
+        return plt
 
     def plot_micro_average_precision_score(self, save_fig_path=None):
         if save_fig_path is not None:
@@ -457,7 +457,7 @@ class ClassificationMetrics(object):
             plt.savefig(save_fig_path)
         else:
             plt.show()
-            pass
+        return plt
 
     def plot_multiclass_precision_recall(self, save_fig_path=None, title='Multi-class precision-recall'):
         if save_fig_path is not None:
@@ -503,7 +503,7 @@ class ClassificationMetrics(object):
             plt.savefig(save_fig_path)
         else:
             plt.show()
-            pass
+        return plt
 
     def get_confusion_matrix(self, threshold=0.5):
         """Get confusion matrix from binary classification
@@ -644,8 +644,8 @@ class ClassificationMetrics(object):
             plt.savefig(save_fig_path)
         else:
             plt.show()
-        plt.close()
-        return True
+
+        return plt
 
     def plot_probability_hist(self, class_n, save_fig_path=None, bins=None, normalize=False):
         """Plot histogram of the probabilities for a specific class
@@ -682,7 +682,7 @@ class ClassificationMetrics(object):
             plt.savefig(save_fig_path)
         else:
             plt.show()
-        plt.close(fig)
+        return plt
 
 
 def binary_clf_curve_with_ids(y_true, y_score, pos_label=None, sample_weight=None, y_true_ids=None):
