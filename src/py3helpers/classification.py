@@ -661,7 +661,7 @@ class ClassificationMetrics(object):
         else:
             y_label = "Count"
 
-        fig = plt.figure(figsize=(12, 8))
+        plt.figure(figsize=(12, 8))
         panel1 = plt.axes([0.1, 0.1, .8, .8])
         panel1.set_xlabel('probability')
         panel1.set_ylabel(y_label)
