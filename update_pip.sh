@@ -8,7 +8,7 @@ rm -rf src/*.egg-info
 python setup.py clean --all sdist bdist_wheel
 python3 setup.py sdist bdist_wheel
 twine check dist/*
-twine upload dist/* --skip-existing dist/*.whl dist/*.gz
+twine upload --skip-existing dist/*.whl dist/*.gz
 
 #if [ "$CONDA" != false ] ; then
 #    echo "conda skeleton pypi ${PNAME}"
