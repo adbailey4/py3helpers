@@ -247,32 +247,35 @@ class ClassificationMetrics(object):
         predictions = self.class_probabilities.idxmax(1)
         return confusion_matrix(labels, predictions, labels=self.class_ns)
 
-    def plot_calibration_curve(self, class_n, save_fig_path=None):
+    def plot_calibration_curve(self, class_n, save_fig_path=None, title=None, n_bins=10):
         if save_fig_path is not None:
             assert os.path.exists(os.path.dirname(save_fig_path)), \
                 "Output directory does not exist: {}".format(save_fig_path)
+
+        if title is None:
+            title = 'Calibration Plot'
 
         labels = self.binary_labels[class_n]
         predictions = self.class_probabilities[class_n]
         clf_score = brier_score_loss(labels, predictions)
         fraction_of_positives, mean_predicted_value = \
-            calibration_curve(labels, predictions, n_bins=10)
+            calibration_curve(labels, predictions, n_bins=n_bins)
 
         plt.figure(figsize=(10, 10))
         ax1 = plt.subplot2grid((3, 1), (0, 0), rowspan=2)
         ax2 = plt.subplot2grid((3, 1), (2, 0))
 
-        ax1.plot([0, 1], [0, 1], "k:", label="Perfectly calibrated")
+        ax1.plot([0, 1], [0, 1], "k:", label="Perfect Calibration")
 
         ax1.plot(mean_predicted_value, fraction_of_positives, "s-",
-                 label="%s (%1.3f)" % (class_n, clf_score))
+                 label="Class: %s Brier Score: (%1.3f)" % (class_n, clf_score))
 
         ax2.hist(predictions, range=(0, 1), bins=10, label=class_n,
                  histtype="step", lw=2)
         ax1.set_ylabel("Fraction of positives")
         ax1.set_ylim([-0.05, 1.05])
         ax1.legend(loc="lower right")
-        ax1.set_title('Calibration plots  (reliability curve)')
+        ax1.set_title(title)
 
         ax2.set_xlabel("Mean predicted value")
         ax2.set_ylabel("Count")
@@ -432,10 +435,16 @@ class ClassificationMetrics(object):
             plt.show()
         return plt
 
-    def plot_micro_average_precision_score(self, save_fig_path=None):
+    def plot_micro_average_precision_score(self, save_fig_path=None, title=None):
         if save_fig_path is not None:
             assert os.path.exists(os.path.dirname(save_fig_path)), \
                 "Output directory does not exist: {}".format(save_fig_path)
+
+        if title is None:
+            title = 'Average precision score, micro-averaged over all classes: ' \
+                    'AP={0:0.2f}'.format(self.average_precision["pr_micro"])
+        else:
+            title += ': AP={0:0.2f}'.format(self.average_precision["pr_micro"])
 
         step_kwargs = ({'step': 'post'}
                        if 'step' in signature(plt.fill_between).parameters
@@ -451,8 +460,7 @@ class ClassificationMetrics(object):
         plt.ylabel('Precision')
         plt.ylim([0.0, 1.05])
         plt.xlim([0.0, 1.0])
-        plt.title('Average precision score, micro-averaged over all classes: '
-                  'AP={0:0.2f}'.format(self.average_precision["pr_micro"]))
+        plt.title(title)
         if save_fig_path is not None:
             plt.savefig(save_fig_path)
         else:
@@ -647,14 +655,16 @@ class ClassificationMetrics(object):
 
         return plt
 
-    def plot_probability_hist(self, class_n, save_fig_path=None, bins=None, normalize=False):
+    def plot_probability_hist(self, class_n, save_fig_path=None, bins=None, normalize=False, title=None):
         """Plot histogram of the probabilities for a specific class
+        :param title: title for plot
         :param class_n: class name
         :param save_fig_path: if set will save figure to path otherwise will just show
         :param bins: number of bins
         :param normalize: normalize histogram
         """
-        title = "Histogram of Probabilities for class {}".format(class_n)
+        if title is None:
+            title = "Histogram of Probabilities for class {}".format(class_n)
 
         if normalize:
             y_label = "density"
