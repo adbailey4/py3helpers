@@ -270,7 +270,7 @@ class ClassificationMetrics(object):
         ax1.plot(mean_predicted_value, fraction_of_positives, "s-",
                  label="Class: %s Brier Score: (%1.3f)" % (class_n, clf_score))
 
-        ax2.hist(predictions, range=(0, 1), bins=10, label=class_n,
+        ax2.hist(predictions, range=(0, 1), bins=n_bins, label=class_n,
                  histtype="step", lw=2)
         ax1.set_ylabel("Fraction of positives")
         ax1.set_ylim([-0.05, 1.05])
