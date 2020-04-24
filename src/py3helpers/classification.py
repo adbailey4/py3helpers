@@ -121,6 +121,8 @@ class ClassificationMetrics(object):
             self.tns[class_n] = self.fps[class_n][-1] - self.fps[class_n]
             # positive predictive value
             self.ppv[class_n] = self.tps[class_n] / (self.tps[class_n] + self.fps[class_n])
+            if np.isnan(self.ppv[class_n][0]):
+                self.ppv[class_n][0] = 1
             # false discovery rate
             self.fdr[class_n] = self.fps[class_n] / (self.tps[class_n] + self.fps[class_n])
             # negative predictive value
@@ -241,6 +243,9 @@ class ClassificationMetrics(object):
 
     def prevalence(self, class_n):
         return np.count_nonzero(self.binary_labels[class_n]) / len(self.binary_labels)
+
+    def get_average_precision(self, class_n):
+        return self.average_precision[class_n]
 
     def confusion_matrix(self):
         labels = self.binary_labels.idxmax(1)
@@ -419,6 +424,9 @@ class ClassificationMetrics(object):
 
         plt.figure()
         lw = 2
+        import scikitplot as skplt
+        # skplt.metrics.plot_precision_recall(self.binary_labels[class_n],
+        #                                     self.class_probabilities)
         plt.plot(self.tpr[class_n], self.ppv[class_n], color='darkblue',
                  lw=lw, label='Precision Recall curve (Average Precision = %0.2f)' % self.average_precision[class_n])
         plt.fill_between(self.tpr[class_n], self.ppv[class_n], alpha=0.2, color='darkblue')
@@ -558,12 +566,10 @@ class ClassificationMetrics(object):
         assert len(self.class_ns) == 2, "Only two classes can be used to plot confusion matrix"
         if class_n is None:
             class_n = self.class_ns[0]
-        positive_threshold = threshold
-        negative_threshold = 1 - threshold
-        tp = self.get_n_tps(class_n, positive_threshold)
-        fp = self.get_n_fps(class_n, positive_threshold)
-        fn = self.get_n_fns(class_n, negative_threshold)
-        tn = self.get_n_tns(class_n, negative_threshold)
+        tp = self.get_n_tps(class_n, threshold)
+        fp = self.get_n_fps(class_n, threshold)
+        fn = self.get_n_fns(class_n, threshold)
+        tn = self.get_n_tns(class_n, threshold)
 
         return self.plot_confusion_matrix_helper(tp, fp, fn, tn, title=title, save_fig_path=save_fig_path)
 
