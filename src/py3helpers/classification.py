@@ -67,6 +67,7 @@ class ClassificationMetrics(object):
         self.roc_auc = dict()
         self.average_precision = dict()
         self.sorted_ids = dict()
+        self.brier_score = dict()
 
         self.total = 0
         self.class_totals = dict()
@@ -117,6 +118,7 @@ class ClassificationMetrics(object):
                 self.sorted_ids[class_n] = np.r_[None, self.sorted_ids[class_n]]
                 self.thresholds[class_n] = np.r_[self.thresholds[class_n][0] + 1, self.thresholds[class_n]]
 
+            self.brier_score[class_n] = brier_score_loss(self.binary_labels[class_n], self.class_probabilities[class_n])
             self.fns[class_n] = self.tps[class_n][-1] - self.tps[class_n]
             self.tns[class_n] = self.fps[class_n][-1] - self.fps[class_n]
             # positive predictive value
@@ -262,7 +264,7 @@ class ClassificationMetrics(object):
 
         labels = self.binary_labels[class_n]
         predictions = self.class_probabilities[class_n]
-        clf_score = brier_score_loss(labels, predictions)
+        clf_score = self.brier_score[class_n]
         fraction_of_positives, mean_predicted_value = \
             calibration_curve(labels, predictions, n_bins=n_bins)
 
