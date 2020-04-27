@@ -426,7 +426,7 @@ class ClassificationMetrics(object):
 
         plt.figure()
         lw = 2
-        import scikitplot as skplt
+        # import scikitplot as skplt
         # skplt.metrics.plot_precision_recall(self.binary_labels[class_n],
         #                                     self.class_probabilities)
         plt.plot(self.tpr[class_n], self.ppv[class_n], color='darkblue',
