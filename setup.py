@@ -66,7 +66,7 @@ setup(
         'moto>=1.3.14'],
     scripts=["src/py3helpers/scripts/merge_methyl_bed_files.py"],
     extras_require={'seq_tools': ['Cython>=0.29.12', 'pysam>=0.15',
-                                  'biopython>=1.73; python_version>"3.6"',
+                                  'biopython>=1.73; python_version>"3.5"',
                                   'biopython<=1.76; python_version<="3.5"',
                                   'mappy==2.17; python_version>"3.6"',
                                   'mappy==2.16; python_version<="3.6"']},
