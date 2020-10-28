@@ -26,7 +26,7 @@ matrix:
   - os: osx
     language: generic
     env:
-    - TOXENV=py37
+    - TOXENV=py38
   - env:
     - TOXENV=py37,codecov
     python: '3.7'
@@ -43,6 +43,8 @@ before_install:
     [[ $TOXENV =~ py2 ]] && brew install python@2
     export PATH="/usr/local/opt/python/libexec/bin:${PATH}"
   fi
+- python --version
+
 install:
 - python -mpip install --progress-bar=off tox -rci/requirements.txt
 - virtualenv --version
