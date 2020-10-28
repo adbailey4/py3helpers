@@ -47,9 +47,9 @@ Overview
     :alt: Supported implementations
     :target: https://pypi.org/project/py3helpers
 
-.. |commits-since| image:: https://img.shields.io/github/commits-since/adbailey4/py3helpers/v0.4.2.svg
+.. |commits-since| image:: https://img.shields.io/github/commits-since/adbailey4/py3helpers/v0.5.0.svg
     :alt: Commits since latest release
-    :target: https://github.com/adbailey4/py3helpers/compare/v0.4.2...master
+    :target: https://github.com/adbailey4/py3helpers/compare/v0.5.0...master
 
 
 

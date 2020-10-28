@@ -1,6 +1,6 @@
 notifications:
   slack:
-    secure: kMi+aHDAiOYUhZbZprKm3X4rI9PcxVWCqCFbxuNtuD6A3hPNGb4Bb/RyAVrqyyk0Ey1GEYq5S6KHWUANmc7VXft6hzuF0LWyC59X/I4hUdXCF8OEOHzgauNCVxv0eWG6ZlUuqwZJKxOElNV3Bf0iw1+0B5Ujm/6nFAQmANjtkhceJ6chvicZvTYJm19FapqL2L8RprkBVpSRtCgSTBovo2v/mjpXCE5XCcrtgBAB9mP6HERbO1p364pU+Ne+k/Lmod2cE/lkVzX5npicVcfRnFfBWNjxXZL/IBXswEbPOROnfuIggV7/dOCEPa8RU21UduECncJZxPzaXj2JmmYq9SD7VpQefOnIhtYkiMR/5j8JjN+6Wxdm2C6K34CfDBJQ/CqOxFWO4Q8ZAZkU3qlpnhhde0MRfFXT5G6FJ3zX1BCtj8JEFzWBpdnpsMAs5RYRKLTgbVKa7J0VkGcXMYjyDPc3w2BpOJUPztPGMSfJ8SyQ/BRWQFB3XZQqUtragta9bnwvHXtQN0gK/2KB+sTbVWCs7xsD7fb0oHU+9gdKTp1Wa4v5QrhXMhldiycgr5q9+oFCTvHMurR69YFFHSVnr83hM8bF9RfWzX9DcPGyoYY+0nGJyRlhBu/Q3Vi0hMNcl4pzfV+rrhUVxQ6xAhFhPXo8n5IbHT2zylfPuskVfRY=
+    secure: fF5IEFsg+x9GU2JFv+Pnm+XMjBbocIv1sm0eWqo5kYeb4yZ8WAkrYHSx7QH5HM1fPRvpKT320JaSx/ZJC/u66xeQ6lkpF4vyrncmOjfoILr2vRERYbGHeMMcwaKgenL4+qyt4Xm6QKH7jq8qNad9n1F+ZDJ8K39OgWsl3pkplN8f3d+nUupZwfbQE1OlhoyySKBokC2JqIRJbXJGFQQgeO3xEuNIiHRrFAQbNoXGMv5FyooOluQdYBntAupwH5Q7Uc4V2eGIelpHNduU2RD8wbfQ+zJ48vTOSj5kYHi8LvkfvxkjsJ5PnHkBCjd/z0fUYmstEKvZxdfM9GnCk5ppGDCE+DcsnDRwODcj9+gbEjRjaV/qdf45ZwGjZ/m2/gHRImDnGfyfB13wJupE0DELk7HwHZcoqdBitoplc6MzEYOQzldvaVHIaiZKe/RNCDJCHOetIJjETZPWy1yjqyv5ngoCEAooWbE4zYKi8WVoAHUQAtMJHqgJTmRirkA83VXyl7J2dv75AZDzsYDbMa/NFq/BgofJXEzWsubKW9WKf58+9EeUq1P7si2QuIRch1dJrFxW9IlResGMwfZyEk+alPJju8TDGOTzcis/ER+GCzeS9jrY2gnEmJwhqlvZ9D+NhHSQJB1NToNVlwaIZ8nAUGFKC/7M0XxWUHCdUTFBexo=
   email: false
 language: python
 dist: xenial
@@ -23,10 +23,10 @@ matrix:
   - env:
     - TOXENV=py36,codecov
     python: '3.6'
-  - os: osx
-    language: generic
-    env:
-    - TOXENV=py37
+#  - os: osx
+#    language: generic
+#    env:
+#    - TOXENV=py38
   - env:
     - TOXENV=py37,codecov
     python: '3.7'
@@ -43,6 +43,7 @@ before_install:
     [[ $TOXENV =~ py2 ]] && brew install python@2
     export PATH="/usr/local/opt/python/libexec/bin:${PATH}"
   fi
+- python --version
 install:
 - python -mpip install --progress-bar=off tox -rci/requirements.txt
 - virtualenv --version

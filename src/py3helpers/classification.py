@@ -67,6 +67,7 @@ class ClassificationMetrics(object):
         self.roc_auc = dict()
         self.average_precision = dict()
         self.sorted_ids = dict()
+        self.brier_score = dict()
 
         self.total = 0
         self.class_totals = dict()
@@ -117,10 +118,13 @@ class ClassificationMetrics(object):
                 self.sorted_ids[class_n] = np.r_[None, self.sorted_ids[class_n]]
                 self.thresholds[class_n] = np.r_[self.thresholds[class_n][0] + 1, self.thresholds[class_n]]
 
+            self.brier_score[class_n] = brier_score_loss(self.binary_labels[class_n], self.class_probabilities[class_n])
             self.fns[class_n] = self.tps[class_n][-1] - self.tps[class_n]
             self.tns[class_n] = self.fps[class_n][-1] - self.fps[class_n]
             # positive predictive value
             self.ppv[class_n] = self.tps[class_n] / (self.tps[class_n] + self.fps[class_n])
+            if np.isnan(self.ppv[class_n][0]):
+                self.ppv[class_n][0] = 1
             # false discovery rate
             self.fdr[class_n] = self.fps[class_n] / (self.tps[class_n] + self.fps[class_n])
             # negative predictive value
@@ -242,37 +246,43 @@ class ClassificationMetrics(object):
     def prevalence(self, class_n):
         return np.count_nonzero(self.binary_labels[class_n]) / len(self.binary_labels)
 
+    def get_average_precision(self, class_n):
+        return self.average_precision[class_n]
+
     def confusion_matrix(self):
         labels = self.binary_labels.idxmax(1)
         predictions = self.class_probabilities.idxmax(1)
         return confusion_matrix(labels, predictions, labels=self.class_ns)
 
-    def plot_calibration_curve(self, class_n, save_fig_path=None):
+    def plot_calibration_curve(self, class_n, save_fig_path=None, title=None, n_bins=10):
         if save_fig_path is not None:
             assert os.path.exists(os.path.dirname(save_fig_path)), \
                 "Output directory does not exist: {}".format(save_fig_path)
 
+        if title is None:
+            title = 'Calibration Plot'
+
         labels = self.binary_labels[class_n]
         predictions = self.class_probabilities[class_n]
-        clf_score = brier_score_loss(labels, predictions)
+        clf_score = self.brier_score[class_n]
         fraction_of_positives, mean_predicted_value = \
-            calibration_curve(labels, predictions, n_bins=10)
+            calibration_curve(labels, predictions, n_bins=n_bins)
 
         plt.figure(figsize=(10, 10))
         ax1 = plt.subplot2grid((3, 1), (0, 0), rowspan=2)
         ax2 = plt.subplot2grid((3, 1), (2, 0))
 
-        ax1.plot([0, 1], [0, 1], "k:", label="Perfectly calibrated")
+        ax1.plot([0, 1], [0, 1], "k:", label="Perfect Calibration")
 
         ax1.plot(mean_predicted_value, fraction_of_positives, "s-",
-                 label="%s (%1.3f)" % (class_n, clf_score))
+                 label="Class: %s Brier Score: (%1.3f)" % (class_n, clf_score))
 
-        ax2.hist(predictions, range=(0, 1), bins=10, label=class_n,
+        ax2.hist(predictions, range=(0, 1), bins=n_bins, label=class_n,
                  histtype="step", lw=2)
         ax1.set_ylabel("Fraction of positives")
         ax1.set_ylim([-0.05, 1.05])
         ax1.legend(loc="lower right")
-        ax1.set_title('Calibration plots  (reliability curve)')
+        ax1.set_title(title)
 
         ax2.set_xlabel("Mean predicted value")
         ax2.set_ylabel("Count")
@@ -416,6 +426,9 @@ class ClassificationMetrics(object):
 
         plt.figure()
         lw = 2
+        # import scikitplot as skplt
+        # skplt.metrics.plot_precision_recall(self.binary_labels[class_n],
+        #                                     self.class_probabilities)
         plt.plot(self.tpr[class_n], self.ppv[class_n], color='darkblue',
                  lw=lw, label='Precision Recall curve (Average Precision = %0.2f)' % self.average_precision[class_n])
         plt.fill_between(self.tpr[class_n], self.ppv[class_n], alpha=0.2, color='darkblue')
@@ -432,10 +445,16 @@ class ClassificationMetrics(object):
             plt.show()
         return plt
 
-    def plot_micro_average_precision_score(self, save_fig_path=None):
+    def plot_micro_average_precision_score(self, save_fig_path=None, title=None):
         if save_fig_path is not None:
             assert os.path.exists(os.path.dirname(save_fig_path)), \
                 "Output directory does not exist: {}".format(save_fig_path)
+
+        if title is None:
+            title = 'Average precision score, micro-averaged over all classes: ' \
+                    'AP={0:0.2f}'.format(self.average_precision["pr_micro"])
+        else:
+            title += ': AP={0:0.2f}'.format(self.average_precision["pr_micro"])
 
         step_kwargs = ({'step': 'post'}
                        if 'step' in signature(plt.fill_between).parameters
@@ -451,8 +470,7 @@ class ClassificationMetrics(object):
         plt.ylabel('Precision')
         plt.ylim([0.0, 1.05])
         plt.xlim([0.0, 1.0])
-        plt.title('Average precision score, micro-averaged over all classes: '
-                  'AP={0:0.2f}'.format(self.average_precision["pr_micro"]))
+        plt.title(title)
         if save_fig_path is not None:
             plt.savefig(save_fig_path)
         else:
@@ -550,12 +568,10 @@ class ClassificationMetrics(object):
         assert len(self.class_ns) == 2, "Only two classes can be used to plot confusion matrix"
         if class_n is None:
             class_n = self.class_ns[0]
-        positive_threshold = threshold
-        negative_threshold = 1 - threshold
-        tp = self.get_n_tps(class_n, positive_threshold)
-        fp = self.get_n_fps(class_n, positive_threshold)
-        fn = self.get_n_fns(class_n, negative_threshold)
-        tn = self.get_n_tns(class_n, negative_threshold)
+        tp = self.get_n_tps(class_n, threshold)
+        fp = self.get_n_fps(class_n, threshold)
+        fn = self.get_n_fns(class_n, threshold)
+        tn = self.get_n_tns(class_n, threshold)
 
         return self.plot_confusion_matrix_helper(tp, fp, fn, tn, title=title, save_fig_path=save_fig_path)
 
@@ -647,14 +663,16 @@ class ClassificationMetrics(object):
 
         return plt
 
-    def plot_probability_hist(self, class_n, save_fig_path=None, bins=None, normalize=False):
+    def plot_probability_hist(self, class_n, save_fig_path=None, bins=None, normalize=False, title=None):
         """Plot histogram of the probabilities for a specific class
+        :param title: title for plot
         :param class_n: class name
         :param save_fig_path: if set will save figure to path otherwise will just show
         :param bins: number of bins
         :param normalize: normalize histogram
         """
-        title = "Histogram of Probabilities for class {}".format(class_n)
+        if title is None:
+            title = "Histogram of Probabilities for class {}".format(class_n)
 
         if normalize:
             y_label = "density"
