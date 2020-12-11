@@ -20,7 +20,7 @@ def read(*names, **kwargs):
 
 setup(
     name='py3helpers',
-    version='0.5.0',
+    version='0.5.1',
     license='BSD-3-Clause',
     description='Python utility functions.',
     long_description='%s\n%s' % (
