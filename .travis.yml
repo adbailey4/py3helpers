@@ -9,6 +9,8 @@ env:
   global:
   - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
   - SEGFAULT_SIGNALS=all
+  - secure: tKYjwIt3PnpXOvoAv1EVZ0YvPCHp/uLD5K78RFRf1NxDY7HXYqYX5e3uWcsZeFftAKnX/0NMRR7ZkA2NShO24Z8zyQQInPlZlXqaEPZR9Rz8ogGl23yPBNVXuUwpQkxt3kejEz5ycgaCPHgVAwi8e7w/FdCnPoCKnQFlSOZBcXHnkBsd355K0VFzrqVt7LwtN6EcJqqVSM/hCbLfDbmFNvA6++bFm7kCqchxEM4U5UySK1bDBj/arJUUFXq5aGoxFWqarqWfCjcrVHYq03BJOP7EUoXPQCuhJ/UBaSrsfkMc9u4f0EnsqJAauXJtJ8IIiFZPK2XoNbZINu9pGC2vkz+ZV/kaAoqyg5ph1ecrDorFpD2BN7GSrTF4WpvXZQzvBaiGxS+CBc78Vj769JHPxbAl+FQqac9SLGqcbNBT8yveuxgKWv2KikPWf9CGPAw1+fla5eUeL/3UkKWpOwkIB5S7SB3KeWi+D/N6P8YAbK0jG752G2yWeIUaL3G5l5DWrVxSWmem8Qk8iZMV0b0doNq7lKwii9kZ0dg6IjPAGWFb84dfWBRcyd8xVKF/u4Wq82GTkS9Fx3fMCFPr9sZ2z6JFHzo/XrqU/vdP1JJAFWHvNrtQ/IBh8qI1xHU3o74Pptt/wuAe3SwEMEmTiLc2RZsuAcpZmC3w/+A7cANI6k4=
+
 matrix:
   include:
   - python: '3.6'
@@ -17,9 +19,6 @@ matrix:
   - python: '3.6'
     env:
     - TOXENV=docs
-  - env:
-    - TOXENV=py35,codecov
-    python: '3.5'
   - env:
     - TOXENV=py36,codecov
     python: '3.6'
@@ -39,15 +38,14 @@ matrix:
       on:
         tags: true
 
-#  - stage: GitHub Release
-#    script: echo "Deploying to GitHub releases ..."
-#    deploy:
-#      provider: releases
-#      api_key: $GITHUB_OAUTH_TOKEN
-#      skip_cleanup: true
-#      on:
-#        tags: true
-
+  - stage: GitHub Release
+    script: echo "Deploying to GitHub releases ..."
+    deploy:
+      provider: releases
+      api_key: $GITHUB_OAUTH_TOKEN
+      skip_cleanup: true
+      on:
+        tags: true
 before_install:
 - python --version
 - uname -a
@@ -60,7 +58,8 @@ before_install:
   fi
 - python --version
 install:
-- python -mpip install --progress-bar=off tox virtualenv>=16.6.0 pip>=19.1.1 setuptools>=18.0.1 six>=1.12.0
+- python -mpip install --progress-bar=off tox virtualenv>=16.6.0 pip>=19.1.1 setuptools>=18.0.1
+  six>=1.12.0
 - virtualenv --version
 - easy_install --version
 - pip --version
@@ -70,4 +69,3 @@ script:
 after_failure:
 - more .tox/log/* | cat
 - more .tox/*/log/* | cat
-

@@ -44,7 +44,6 @@ setup(
         'Operating System :: POSIX',
         'Operating System :: Microsoft :: Windows',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
@@ -56,7 +55,7 @@ setup(
         'Issue Tracker': 'https://github.com/adbailey4/py3helpers/issues',
     },
     keywords=['utility', 'python3', 'functions'],
-    python_requires='>=3.5',
+    python_requires='>3.5',
     install_requires=[
         'numpy>=1.14.2',
         'pandas>=0.23.4',
