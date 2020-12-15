@@ -29,13 +29,8 @@ matrix:
   - env:
     - TOXENV=py38,codecov
     python: '3.8'
-  - deploy:
-      provider: pypi
-      username: __token__
-      password:
-        secure: Cnu0c/bX0f+n4Z1L7aPKfo0MsbYk+49LYv1hVGmcT5GhklHdchGM6dzi5X/hluid6qwUKVWlSThAxouvWXuWxYgsVT2ZUJPnf8rOa2g3ZBnePBwlezLpqB+9+agw/3FQac8iMbor1DpPQn63oZxth7becarE/dx287FY9OnwsE5f7Mp659skg/b4G3Z8fq+r4ioT/bsdY1AH+i3ZqRNpVj3qquoh51LY6Smy8JV01kR6vacvev/xs9gMIHdpor/0QUBokbvpGzGSzpJZfmF5nn51H6EVrsvIXruYOBnyWispGCMln8a9tWnrctjGbAzR+ty1sE+3Bq+vRi3/VD9yEBPoTNRt1kwqof40jj/z0fOylAc7ylzLx9GtxkJkIC+6/IZgwfvBQ70mQit40OHwkSFmMforSe4TjMbJFKqTQmwaCPplB65/IDxfMer3nMcfBf9mjwTlUWS7iUlisAPpPslvv1j+qtiGXRTPBByP8u8x2B9dqEZ4+WPh6q4oWCaKDlEh1YCWdlK4bJR8Tak2dMz1lnLC0AAjWXCzWfLeKRizpNXY40D2WqAj4z8VuJS3nGhQ50lLJp28Rz1zogdMYiZ5MEtm12cL+/C3qIO76qEpIeh8gbZyQDpewC/KDSKlBodmEn10Z8Yupn+pwq+bgvHR9lt4m+nHphw91hVCCAU=
-      on:
-        tags: true
+  - stage: deploy
+    python: '3.6'
 
 before_install:
 - python --version
@@ -59,3 +54,11 @@ script:
 after_failure:
 - more .tox/log/* | cat
 - more .tox/*/log/* | cat
+
+deploy:
+  provider: pypi
+  username: __token__
+  password:
+    secure: Cnu0c/bX0f+n4Z1L7aPKfo0MsbYk+49LYv1hVGmcT5GhklHdchGM6dzi5X/hluid6qwUKVWlSThAxouvWXuWxYgsVT2ZUJPnf8rOa2g3ZBnePBwlezLpqB+9+agw/3FQac8iMbor1DpPQn63oZxth7becarE/dx287FY9OnwsE5f7Mp659skg/b4G3Z8fq+r4ioT/bsdY1AH+i3ZqRNpVj3qquoh51LY6Smy8JV01kR6vacvev/xs9gMIHdpor/0QUBokbvpGzGSzpJZfmF5nn51H6EVrsvIXruYOBnyWispGCMln8a9tWnrctjGbAzR+ty1sE+3Bq+vRi3/VD9yEBPoTNRt1kwqof40jj/z0fOylAc7ylzLx9GtxkJkIC+6/IZgwfvBQ70mQit40OHwkSFmMforSe4TjMbJFKqTQmwaCPplB65/IDxfMer3nMcfBf9mjwTlUWS7iUlisAPpPslvv1j+qtiGXRTPBByP8u8x2B9dqEZ4+WPh6q4oWCaKDlEh1YCWdlK4bJR8Tak2dMz1lnLC0AAjWXCzWfLeKRizpNXY40D2WqAj4z8VuJS3nGhQ50lLJp28Rz1zogdMYiZ5MEtm12cL+/C3qIO76qEpIeh8gbZyQDpewC/KDSKlBodmEn10Z8Yupn+pwq+bgvHR9lt4m+nHphw91hVCCAU=
+  on:
+    tags: true
