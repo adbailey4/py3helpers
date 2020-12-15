@@ -159,11 +159,12 @@ class AwsS3(S3Client):
             files.append(out_file)
         return files
 
-    def upload_object(self, file_path, destination, use_original_name=True):
+    def upload_object(self, file_path, destination, use_original_name=True, ExtraArgs=None):
         """Upload a file to s3 bucket
         :param use_original_name: boolean option to use the basename of original file
         :param file_path: path to file to upload
         :param destination: location to place file
+        :param ExtraArgs: dictionary of extra arguments for data object
         :return: True
         """
         assert os.path.exists(file_path), "File path does not exist {}".format(file_path)
@@ -171,7 +172,7 @@ class AwsS3(S3Client):
         if use_original_name:
             save_path = os.path.join(save_path, os.path.basename(file_path))
 
-        self.s3_client.upload_file(file_path, bucket_name, save_path)
+        self.s3_client.upload_file(file_path, bucket_name, save_path, ExtraArgs=ExtraArgs)
         return os.path.join(bucket_name, save_path)
 
     def create_bucket(self, bucket_name, region="us-west-2"):

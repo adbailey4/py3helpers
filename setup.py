@@ -20,7 +20,7 @@ def read(*names, **kwargs):
 
 setup(
     name='py3helpers',
-    version='0.5.0',
+    version='0.5.1',
     license='BSD-3-Clause',
     description='Python utility functions.',
     long_description='%s\n%s' % (
@@ -44,7 +44,6 @@ setup(
         'Operating System :: POSIX',
         'Operating System :: Microsoft :: Windows',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
@@ -56,14 +55,14 @@ setup(
         'Issue Tracker': 'https://github.com/adbailey4/py3helpers/issues',
     },
     keywords=['utility', 'python3', 'functions'],
-    python_requires='>=3.5',
+    python_requires='>3.5',
     install_requires=[
         'numpy>=1.14.2',
         'pandas>=0.23.4',
         'scikit-learn>=0.19.0',
         'matplotlib>=2.0.2',
         'boto3>=1.9.201',
-        'moto>=1.3.14'],
+        'moto[s3]>=1.3.14'],
     scripts=["src/py3helpers/scripts/merge_methyl_bed_files.py"],
     extras_require={'seq_tools': ['Cython>=0.29.12', 'pysam>=0.15',
                                   'biopython>=1.73; python_version>"3.5"',
