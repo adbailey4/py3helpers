@@ -57,7 +57,6 @@ setup(
     keywords=['utility', 'python3', 'functions'],
     python_requires='>3.5',
     install_requires=[
-        'numpy>=1.14.2',
         'pandas>=0.23.4',
         'scikit-learn>=0.19.0',
         'matplotlib>=2.0.2',
