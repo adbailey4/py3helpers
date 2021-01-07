@@ -25,6 +25,7 @@ if platform.system() == "Darwin" and sysconfig.get_config_var("PYTHONFRAMEWORK")
     mpl.use("macosx")
 import matplotlib.pyplot as plt  # noqa: E402
 import matplotlib.ticker as ticker  # noqa: E402
+from matplotlib.collections import LineCollection
 
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
@@ -361,18 +362,41 @@ class ClassificationMetrics(object):
             prev_n_calls = n_calls
         return names
 
-    def plot_roc(self, class_n, save_fig_path=None, title="Receiver operating characteristic"):
+    def plot_roc(self, class_n, save_fig_path=None, title="Receiver operating characteristic",
+                 thresholds_at=None):
         if save_fig_path is not None:
             assert os.path.exists(os.path.dirname(save_fig_path)), \
                 "Output directory does not exist: {}".format(save_fig_path)
 
-        plt.figure()
+        # plt.figure()
+        fig = plt.figure(figsize=(8, 8))
+        panel1 = plt.axes([0.1, 0.1, .8, .8])
+
         lw = 2
-        plt.plot(self.fpr[class_n], self.tpr[class_n], color='darkorange',
-                 lw=lw, label='ROC curve (area = %0.2f)' % self.roc_auc[class_n])
+        # Create a continuous norm to map from data points to colors
+        points = np.array([self.fpr[class_n], self.tpr[class_n]]).T.reshape(-1, 1, 2)
+        segments = np.concatenate([points[:-1], points[1:]], axis=1)
+        norm = plt.Normalize(np.min([0, np.min(self.thresholds[class_n])]), np.max(self.thresholds[class_n])-1)
+        lc = LineCollection(segments, cmap='viridis', norm=norm, label='ROC curve (area = %0.2f)' % self.roc_auc[class_n])
+        lc.set_array(self.thresholds[class_n])
+        lc.set_linewidth(2)
+        line = panel1.add_collection(lc)
+        fig.colorbar(line, ax=panel1)
+
         plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
         plt.xlim([0.0, 1.0])
         plt.ylim([0.0, 1.05])
+
+        if thresholds_at is not None:
+            assert isinstance(thresholds_at, list), f"thresholds_at needs to be a list but is not: {thresholds_at}"
+            for i in thresholds_at:
+                index = self._get_index_from_threshold(class_n, i)
+                threshold_value_with_max_four_decimals = str(self.thresholds[class_n][index])[:5]
+                plt.text(self.fpr[class_n][index] - 0.03, self.tpr[class_n][index] + 0.005,
+                         threshold_value_with_max_four_decimals,
+                         fontdict={'size': 15}, color='black')
+                plt.plot(self.fpr[class_n][index], self.tpr[class_n][index], marker="o", color='black')
+
         plt.xlabel('False Positive Rate')
         plt.ylabel('True Positive Rate')
         plt.title(title)
