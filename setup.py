@@ -55,9 +55,9 @@ setup(
         'Issue Tracker': 'https://github.com/adbailey4/py3helpers/issues',
     },
     keywords=['utility', 'python3', 'functions'],
-    python_requires='>3.5',
+    python_requires='>3.6',
     install_requires=[
-        'pandas>=0.23.4',
+        'pandas>=0.23.4, <=1.2.0',
         'scikit-learn>=0.19.0',
         'matplotlib>=2.0.2',
         'boto3>=1.9.201',
