@@ -363,7 +363,7 @@ class ClassificationMetrics(object):
         return names
 
     def plot_roc(self, class_n, save_fig_path=None, title="Receiver operating characteristic",
-                 thresholds_at=None):
+                 thresholds_at=None, cbar_label="Probability Threshold"):
         if save_fig_path is not None:
             assert os.path.exists(os.path.dirname(save_fig_path)), \
                 "Output directory does not exist: {}".format(save_fig_path)
@@ -377,11 +377,12 @@ class ClassificationMetrics(object):
         points = np.array([self.fpr[class_n], self.tpr[class_n]]).T.reshape(-1, 1, 2)
         segments = np.concatenate([points[:-1], points[1:]], axis=1)
         norm = plt.Normalize(np.min([0, np.min(self.thresholds[class_n])]), np.max(self.thresholds[class_n])-1)
-        lc = LineCollection(segments, cmap='viridis', norm=norm, label='ROC curve (area = %0.2f)' % self.roc_auc[class_n])
+        lc = LineCollection(segments, cmap='viridis', norm=norm, label='ROC curve (area = %0.6f)' % self.roc_auc[class_n])
         lc.set_array(self.thresholds[class_n])
         lc.set_linewidth(2)
         line = panel1.add_collection(lc)
-        fig.colorbar(line, ax=panel1)
+        cbar = fig.colorbar(line, ax=panel1)
+        cbar.ax.set_ylabel(cbar_label, rotation=270, fontsize=15, labelpad=20)
 
         plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
         plt.xlim([0.0, 1.0])
@@ -397,10 +398,10 @@ class ClassificationMetrics(object):
                          fontdict={'size': 15}, color='black')
                 plt.plot(self.fpr[class_n][index], self.tpr[class_n][index], marker="o", color='black')
 
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
-        plt.title(title)
-        plt.legend(loc="lower right")
+        plt.xlabel('False Positive Rate', fontsize=15)
+        plt.ylabel('True Positive Rate', fontsize=15)
+        plt.title(title, fontsize=15)
+        plt.legend(loc="lower right", fontsize=15)
         if save_fig_path is not None:
             plt.savefig(save_fig_path)
         else:

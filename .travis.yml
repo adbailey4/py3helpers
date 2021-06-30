@@ -58,8 +58,7 @@ before_install:
   fi
 - python --version
 install:
-- python -mpip install --progress-bar=off tox virtualenv>=16.6.0 pip>=19.1.1 setuptools>=18.0.1
-  six>=1.12.0
+- python -mpip install --progress-bar=off --upgrade tox virtualenv pip setuptools six
 - virtualenv --version
 - easy_install --version
 - pip --version
