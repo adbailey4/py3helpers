@@ -338,10 +338,10 @@ class ClassificationTests(unittest.TestCase):
 
     def test__get_index_from_threshold(self):
         with captured_output() as (_, _):
-            threshold = 0.5
-            for x in np.linspace(0, 1, 20):
+            # threshold = 0.5
+            for threshold in np.linspace(0, 1, 20):
                 index = self.perfect_binary._get_index_from_threshold("A", threshold)
-                answer = None
+                answer = len(self.perfect_binary.thresholds["A"]) - 1
                 for x in range(len(self.perfect_binary.thresholds["A"])):
                     if self.perfect_binary.thresholds["A"][x] > threshold:
                         continue

@@ -15,6 +15,7 @@ import platform
 import sysconfig
 from inspect import signature
 from itertools import cycle
+import bisect
 
 import matplotlib as mpl
 
@@ -173,10 +174,10 @@ class ClassificationMetrics(object):
         """Get correct index from any arbitrary probability threshold cutoff"""
         assert class_n in self.class_ns, \
             "Class name is not in class names. {} not in {}".format(class_n, self.class_ns)
-        index = binary_search(self.thresholds[class_n][::-1], threshold, exact_match=False)
+        index = bisect.bisect_left(self.thresholds[class_n][::-1], threshold) - 1
         if index == len(self.thresholds[class_n]) - 1:
             return 0
-        elif index == 0:
+        elif index == 0 or index == -1:
             true_index = len(self.thresholds[class_n]) - 1
             if self.thresholds[class_n][true_index] >= threshold:
                 return true_index
