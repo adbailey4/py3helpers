@@ -31,7 +31,6 @@ from matplotlib.collections import LineCollection
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 from numpy import interp  # noqa: E402
-from py3helpers.utils import binary_search  # noqa: E402
 from sklearn.calibration import calibration_curve  # noqa: E402
 from sklearn.metrics import (auc, average_precision_score, brier_score_loss,
                              confusion_matrix, precision_recall_curve,
