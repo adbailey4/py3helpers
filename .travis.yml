@@ -1,7 +1,3 @@
-notifications:
-  slack:
-    secure: fF5IEFsg+x9GU2JFv+Pnm+XMjBbocIv1sm0eWqo5kYeb4yZ8WAkrYHSx7QH5HM1fPRvpKT320JaSx/ZJC/u66xeQ6lkpF4vyrncmOjfoILr2vRERYbGHeMMcwaKgenL4+qyt4Xm6QKH7jq8qNad9n1F+ZDJ8K39OgWsl3pkplN8f3d+nUupZwfbQE1OlhoyySKBokC2JqIRJbXJGFQQgeO3xEuNIiHRrFAQbNoXGMv5FyooOluQdYBntAupwH5Q7Uc4V2eGIelpHNduU2RD8wbfQ+zJ48vTOSj5kYHi8LvkfvxkjsJ5PnHkBCjd/z0fUYmstEKvZxdfM9GnCk5ppGDCE+DcsnDRwODcj9+gbEjRjaV/qdf45ZwGjZ/m2/gHRImDnGfyfB13wJupE0DELk7HwHZcoqdBitoplc6MzEYOQzldvaVHIaiZKe/RNCDJCHOetIJjETZPWy1yjqyv5ngoCEAooWbE4zYKi8WVoAHUQAtMJHqgJTmRirkA83VXyl7J2dv75AZDzsYDbMa/NFq/BgofJXEzWsubKW9WKf58+9EeUq1P7si2QuIRch1dJrFxW9IlResGMwfZyEk+alPJju8TDGOTzcis/ER+GCzeS9jrY2gnEmJwhqlvZ9D+NhHSQJB1NToNVlwaIZ8nAUGFKC/7M0XxWUHCdUTFBexo=
-  email: false
 language: python
 dist: xenial
 cache: false
@@ -60,7 +56,6 @@ before_install:
 install:
 - python -mpip install --progress-bar=off --upgrade tox virtualenv pip setuptools six
 - virtualenv --version
-- easy_install --version
 - pip --version
 - tox --version
 script:
