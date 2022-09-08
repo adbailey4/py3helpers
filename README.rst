@@ -19,7 +19,7 @@ Overview
     :target: https://readthedocs.org/projects/py3helpers
     :alt: Documentation Status
 
-.. |travis| image:: https://api.travis-ci.org/adbailey4/py3helpers.svg?branch=master
+.. |travis| image:: https://api.travis-ci.com/adbailey4/py3helpers.svg?branch=master
     :alt: Travis-CI Build Status
     :target: https://travis-ci.org/adbailey4/py3helpers
 
@@ -46,11 +46,6 @@ Overview
 .. |supported-implementations| image:: https://img.shields.io/pypi/implementation/py3helpers.svg
     :alt: Supported implementations
     :target: https://pypi.org/project/py3helpers
-
-.. |commits-since| image:: https://img.shields.io/github/commits-since/adbailey4/py3helpers/v0.5.3.svg
-    :alt: Commits since latest release
-    :target: https://github.com/adbailey4/py3helpers/compare/v0.5.3...master
-
 
 
 .. end-badges

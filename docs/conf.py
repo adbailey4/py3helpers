@@ -20,7 +20,7 @@ project = 'py3helpers'
 year = '2020'
 author = 'Andrew Dewey Bailey IV'
 copyright = '{0}, {1}'.format(year, author)
-version = release = '0.5.3'
+version = release = '1.0.0'
 
 pygments_style = 'trac'
 templates_path = ['.']

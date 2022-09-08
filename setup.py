@@ -20,7 +20,7 @@ def read(*names, **kwargs):
 
 setup(
     name='py3helpers',
-    version='0.5.3',
+    version='1.0.0',
     license='BSD-3-Clause',
     description='Python utility functions.',
     long_description='%s\n%s' % (
@@ -61,13 +61,13 @@ setup(
         'scikit-learn>=0.19.0',
         'matplotlib>=2.0.2',
         'boto3>=1.9.201',
-        'moto[s3]==1.3.14'],
+        'moto[s3]==1.3.14',
+        'Cython>=0.29.12', 'pysam>=0.15',
+        'biopython>=1.73; python_version>"3.5"',
+        'biopython<=1.76; python_version<="3.5"',
+        'mappy>=2.17; python_version>"3.6"',
+        'mappy<=2.16; python_version<="3.6"'],
     scripts=["src/py3helpers/scripts/merge_methyl_bed_files.py"],
-    extras_require={'seq_tools': ['Cython>=0.29.12', 'pysam>=0.15',
-                                  'biopython>=1.73; python_version>"3.5"',
-                                  'biopython<=1.76; python_version<="3.5"',
-                                  'mappy==2.17; python_version>"3.6"',
-                                  'mappy==2.16; python_version<="3.6"']},
     entry_points={
         'console_scripts': [
             'py3helpers = py3helpers.cli:main',
