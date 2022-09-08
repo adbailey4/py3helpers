@@ -14,7 +14,6 @@ Overview
         | |codecov|
     * - package
       - | |version| |wheel| |supported-versions| |supported-implementations|
-        | |commits-since|
 .. |docs| image:: https://readthedocs.org/projects/py3helpers/badge/?style=flat
     :target: https://readthedocs.org/projects/py3helpers
     :alt: Documentation Status
